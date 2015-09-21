@@ -39,6 +39,7 @@ usage () {
 
   -h           optional  Print this help message
   -l PATH      optional  Log output in PATH
+  -j PATH      optional  Log JSON format results to PATH
 EOF
 }
 
@@ -50,6 +51,7 @@ do
   case $args in
   h) usage; exit 0 ;;
   l) logger="$OPTARG" ;;
+  j) jsonlog="$OPTARG" ;;
   *) usage; exit 1 ;;
   esac
 done
@@ -57,6 +59,12 @@ done
 if [ -z "$logger" ]; then
   logger="${myname}.log"
 fi
+
+if [ -z "$jsonlog" ]; then
+  jsonlog="${myname}.json"
+fi
+
+jsondelim=""
 
 yell "# ------------------------------------------------------------------------------
 # Docker Bench for Security v1.0.0
@@ -76,6 +84,7 @@ if [ "x$ID" != "x0" ]; then
 fi
 
 logit "Initializing $(date)\n"
+jsonstart
 
 # Load all the tests from tests/ and run them
 main () {
@@ -97,3 +106,4 @@ main () {
 }
 
 main "$@"
+jsonend

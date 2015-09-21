@@ -15,6 +15,7 @@ info () {
 
 pass () {
   printf "%b\n" "${bldgrn}[PASS]${txtrst} $1" | tee -a "$logger"
+  jsonpass $1 "true"
 }
 
 warn () {
@@ -23,4 +24,17 @@ warn () {
 
 yell () {
   printf "%b\n" "${bldylw}$1${txtrst}\n"
+}
+
+jsonstart () {
+  printf "{ \"passedTests\": [" >> "$jsonlog"
+}
+
+jsonpass () {
+  printf "%b \"%b\"" "$jsondelim" "$1" >> "$jsonlog"
+  jsondelim=","
+}
+
+jsonend () {
+  printf " ] }" >> "$jsonlog"
 }
